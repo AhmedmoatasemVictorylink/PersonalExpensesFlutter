@@ -1,4 +1,5 @@
 
+import 'dart:io';
 import 'package:expense_planner/widgets/chart.dart';
 import 'package:expense_planner/widgets/new_transaction.dart';
 import 'package:expense_planner/widgets/transaction_list.dart';
@@ -23,7 +24,10 @@ class MyApp extends StatelessWidget {
       title: "Personal Expenses",
       theme: ThemeData(
           primarySwatch: Colors.purple,
-          colorScheme: ColorScheme.fromSwatch(accentColor: Colors.amber,primarySwatch: Colors.purple),
+          colorScheme: ColorScheme.fromSwatch(
+            accentColor: Colors.amber,
+            primarySwatch: Colors.purple
+            ),
           errorColor: Colors.red,
           textTheme: ThemeData.light().textTheme.copyWith(
                 button: const TextStyle(color: Colors.white),
@@ -177,7 +181,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: Platform.isIOS 
+      ? Container()   // doesn't do any thing
+      :  FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => _startAddNewTransaction(context),
       ),
