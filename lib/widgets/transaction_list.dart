@@ -1,4 +1,5 @@
 
+
 import 'package:flutter/material.dart';
 import '../models/Transaction.dart';
 import 'package:intl/intl.dart';
@@ -48,7 +49,16 @@ class TransactionList extends StatelessWidget {
               ),
               title: Text(transactions[index].title),
               subtitle: Text(DateFormat.yMMMd().format(transactions[index].date)),
-              trailing: IconButton(
+              trailing: MediaQuery.of(context).size.width > 460 
+              ? TextButton.icon(
+                onPressed: () => deleteTx(transactions[index].id),
+                icon: Icon(Icons.delete),
+                label: Text("delete"),
+                style: TextButton.styleFrom(
+                    primary: Theme.of(context).errorColor,
+                  ),
+                )
+              : IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () => deleteTx(transactions[index].id),
                 color: Theme.of(context).errorColor,

@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       title: "Personal Expenses",
       theme: ThemeData(
           primarySwatch: Colors.purple,
+          colorScheme: ColorScheme.fromSwatch(accentColor: Colors.amber,primarySwatch: Colors.purple),
           errorColor: Colors.red,
           textTheme: ThemeData.light().textTheme.copyWith(
                 button: const TextStyle(color: Colors.white),
@@ -105,8 +106,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
     final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+        mediaQuery.orientation == Orientation.landscape;
 
     final appBar = AppBar(
       // app bar
@@ -122,9 +124,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final txListWidget = Container(
         // text input card and transaction list here
-        height: (MediaQuery.of(context).size.height -
+        height: (mediaQuery.size.height -
                 appBar.preferredSize.height -
-                MediaQuery.of(context).padding.top) *
+                mediaQuery.padding.top) *
             0.7,
         child: TransactionList(_userTransactions, _deletetransaction));
 
@@ -142,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Show chart"),
-                  Switch(
+                  Switch.adaptive(
                     value: _showChart,
                     onChanged: (val) {
                       setState(() {
@@ -155,9 +157,9 @@ class _MyHomePageState extends State<MyHomePage> {
             if (!isLandscape)
               Container(
                   // chart here
-                  height: (MediaQuery.of(context).size.height -
+                  height: (mediaQuery.size.height -
                           appBar.preferredSize.height -
-                          MediaQuery.of(context).padding.top) *
+                          mediaQuery.padding.top) *
                       0.3,
                   child: Chart(_recentTransactions)),  // 3
             if (!isLandscape) txListWidget,   // 7
@@ -165,9 +167,9 @@ class _MyHomePageState extends State<MyHomePage> {
               _showChart // ternary expression
                   ? Container(
                       // chart here
-                      height: (MediaQuery.of(context).size.height -
+                      height: (mediaQuery.size.height -
                               appBar.preferredSize.height -
-                              MediaQuery.of(context).padding.top) *
+                              mediaQuery.padding.top) *
                           0.7,
                       child: Chart(_recentTransactions))  // 7
                   : txListWidget,
