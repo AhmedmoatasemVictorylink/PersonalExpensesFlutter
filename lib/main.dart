@@ -148,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
             0.7,
         child: TransactionList(_userTransactions, _deletetransaction));
 
-    final pageBody =  SingleChildScrollView(
+    final pageBody = SafeArea(child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -159,7 +159,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 // nested if inside list
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Show chart"),
+                  Text("Show chart",
+                  style: TextStyle(fontFamily: '.SF UI Display'),),  // '.SF UI Display'
                   Switch.adaptive(
                     value: _showChart,
                     onChanged: (val) {
@@ -191,7 +192,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   : txListWidget,
           ],
         ),
-      );   
+      ),
+    );   
 
     return Platform.isIOS 
     ? CupertinoPageScaffold(
