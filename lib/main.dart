@@ -7,12 +7,11 @@ import 'package:flutter/services.dart';
 import './models/Transaction.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-     DeviceOrientation.portraitDown,
-     ]);  // setting orientation to protrait up only
-
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //    DeviceOrientation.portraitDown,
+  //    ]);  // setting orientation to protrait up only
     runApp(const MyApp());
 }
 
@@ -58,6 +57,8 @@ class _MyHomePageState extends State<MyHomePage> {
     //   date: DateTime.now(),
     // ),
   ];
+
+  bool _showChart = false;
 
   List<Transaction> get _recentTransactions {
     return _userTransactions.where( (tx) {
@@ -120,16 +121,31 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            // chart here
-            Container(
+            // switch widget
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+               Text("Show chart"),
+              Switch(
+                value: _showChart,
+                onChanged: (val) {
+                  setState(() {
+                    _showChart = val;
+                  });
+                },
+                 )
+            ],
+            ),
+            _showChart   // ternary expression
+            ? Container(   // chart here
               height: (MediaQuery.of(context).size.height -
                          appBar.preferredSize.height -
-                         MediaQuery.of(context).padding.top) * 0.3,
+                         MediaQuery.of(context).padding.top) * 0.7,
               child: Chart(_recentTransactions)
-              ),     // chart 
+              )    // chart 
 
-            // text input card and transaction list here
-            Container(
+            
+            : Container(     // text input card and transaction list here
               height: (MediaQuery.of(context).size.height -
                            appBar.preferredSize.height -
                            MediaQuery.of(context).padding.top) * 0.7,

@@ -13,16 +13,18 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return  transactions.isEmpty    // trenary expersion
       // in case of empty list
-      ? Column(children: [
+      ? LayoutBuilder(builder: (ctx, constarints) {
+        return Column(children: [
         Text("There is no transactions"),
         SizedBox(height: 20,),
         Container(
-          height: 200,
+          height: constarints.maxHeight * 0.6,
           child: Image.asset(
             "assets/images/cairofest.png",
             fit: BoxFit.cover,
             ))
-      ],) 
+      ],);
+      }) 
       // in case of table view for expenses list
       :  ListView.builder(
         itemBuilder: (ctx, index) {
