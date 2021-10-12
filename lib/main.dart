@@ -12,7 +12,7 @@ void main() {
   //   DeviceOrientation.portraitUp,
   //    DeviceOrientation.portraitDown,
   //    ]);  // setting orientation to protrait up only
-    runApp(const MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -22,13 +22,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Personal Expenses",
       theme: ThemeData(
-        primarySwatch: Colors.purple,
-        errorColor: Colors.red,
-        textTheme: ThemeData.light().textTheme.copyWith(
-          button: const TextStyle(color: Colors.white),
-        )
-       // colorScheme: ThemeData().colorScheme.copyWith(secondary: Colors.amber),
-      ),
+          primarySwatch: Colors.purple,
+          errorColor: Colors.red,
+          textTheme: ThemeData.light().textTheme.copyWith(
+                button: const TextStyle(color: Colors.white),
+              )
+          // colorScheme: ThemeData().colorScheme.copyWith(secondary: Colors.amber),
+          ),
       home: MyHomePage(),
     );
   }
@@ -42,7 +42,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   final List<Transaction> _userTransactions = [
     //  Transaction(
     //   id: "t1",
@@ -61,36 +60,39 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _showChart = false;
 
   List<Transaction> get _recentTransactions {
-    return _userTransactions.where( (tx) {
+    return _userTransactions.where((tx) {
       return tx.date.isAfter(
         DateTime.now().subtract(
           Duration(days: 7),
-          ),
+        ),
       );
     }).toList();
   }
 
-  void _addNewTransaction(String txTitle, double txAmount, DateTime choosenDate) {
+  void _addNewTransaction(
+      String txTitle, double txAmount, DateTime choosenDate) {
     final newTx = Transaction(
       title: txTitle,
-       amount: txAmount,
-       date: choosenDate,
-       id: DateTime.now().toString(),
-       );
+      amount: txAmount,
+      date: choosenDate,
+      id: DateTime.now().toString(),
+    );
 
-       setState(() {
-         _userTransactions.add(newTx);
-       });
+    setState(() {
+      _userTransactions.add(newTx);
+    });
   }
 
   void _startAddNewTransaction(BuildContext ctx) {
-    showModalBottomSheet(context: ctx, builder: (_){
-      return GestureDetector(
-        child: NewTransaction(_addNewTransaction),
-        onTap: () => {},
-        behavior: HitTestBehavior.opaque,
-      );
-    });
+    showModalBottomSheet(
+        context: ctx,
+        builder: (_) {
+          return GestureDetector(
+            child: NewTransaction(_addNewTransaction),
+            onTap: () => {},
+            behavior: HitTestBehavior.opaque,
+          );
+        });
   }
 
   void _deletetransaction(String id) {
@@ -103,53 +105,72 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
-    final appBar = AppBar(  // app bar
-        title: Text("Personal Expenses"),  // app bar title
-        actions: [
-          IconButton(     // app bar button
-            onPressed: () => _startAddNewTransaction(context),
-            icon: Icon(Icons.add),
-          )
-        ],
-      );
+    final appBar = AppBar(
+      // app bar
+      title: Text("Personal Expenses"), // app bar title
+      actions: [
+        IconButton(
+          // app bar button
+          onPressed: () => _startAddNewTransaction(context),
+          icon: Icon(Icons.add),
+        )
+      ],
+    );
+
+    final txListWidget = Container(
+        // text input card and transaction list here
+        height: (MediaQuery.of(context).size.height -
+                appBar.preferredSize.height -
+                MediaQuery.of(context).padding.top) *
+            0.7,
+        child: TransactionList(_userTransactions, _deletetransaction));
 
     return Scaffold(
       appBar: appBar,
-      body: SingleChildScrollView(   
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             // switch widget
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-               Text("Show chart"),
-              Switch(
-                value: _showChart,
-                onChanged: (val) {
-                  setState(() {
-                    _showChart = val;
-                  });
-                },
-                 )
-            ],
-            ),
-            _showChart   // ternary expression
-            ? Container(   // chart here
-              height: (MediaQuery.of(context).size.height -
-                         appBar.preferredSize.height -
-                         MediaQuery.of(context).padding.top) * 0.7,
-              child: Chart(_recentTransactions)
-              )    // chart 
-
-            
-            : Container(     // text input card and transaction list here
-              height: (MediaQuery.of(context).size.height -
-                           appBar.preferredSize.height -
-                           MediaQuery.of(context).padding.top) * 0.7,
-              child: TransactionList(_userTransactions, _deletetransaction)),    // tranactions list
+            if (isLandscape)
+              Row(
+                // nested if inside list
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Show chart"),
+                  Switch(
+                    value: _showChart,
+                    onChanged: (val) {
+                      setState(() {
+                        _showChart = val;
+                      });
+                    },
+                  )
+                ],
+              ),
+            if (!isLandscape)
+              Container(
+                  // chart here
+                  height: (MediaQuery.of(context).size.height -
+                          appBar.preferredSize.height -
+                          MediaQuery.of(context).padding.top) *
+                      0.3,
+                  child: Chart(_recentTransactions)),  // 3
+            if (!isLandscape) txListWidget,   // 7
+            if (isLandscape)
+              _showChart // ternary expression
+                  ? Container(
+                      // chart here
+                      height: (MediaQuery.of(context).size.height -
+                              appBar.preferredSize.height -
+                              MediaQuery.of(context).padding.top) *
+                          0.7,
+                      child: Chart(_recentTransactions))  // 7
+                  : txListWidget,
           ],
         ),
       ),
