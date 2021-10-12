@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
+
   final Function addTx;
 
   NewTransaction(this.addTx);
@@ -64,32 +65,28 @@ class _NewTransactionState extends State<NewTransaction> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            TextField(
+            TextField(   // title text filed
               decoration: const InputDecoration(labelText: "Title"),
               controller: _titleController,
               onSubmitted: (_) => _submitData(),
-              // onChanged: (val) {
-              //   titleInput = val;
-              // },
             ),
-            TextField(
+            TextField(    // amount text filed
               decoration: const InputDecoration(labelText: "Amount"),
               controller: _amountController,
               keyboardType: TextInputType.number,
               onSubmitted: (_) => _submitData(),
-              // onChanged: (val) => amountInput = val,
             ),
             Container(
               height: 70,
               child: Row(children: [
                 Expanded(
-                  child: Text(
+                  child: Text(   // picked date text
                     _selectedDate == null 
                       ?  "No date chosen" 
                       : 'Picked Date: ${DateFormat.yMd().format(_selectedDate!)}'
                       ),
                 ),
-                TextButton(
+                TextButton(   // choose date button
                 onPressed: _presentDatePicker,
                 child: const Text(
                   "Chose date",
@@ -101,7 +98,7 @@ class _NewTransactionState extends State<NewTransaction> {
               )
               ],),
             ),
-            ElevatedButton(
+            ElevatedButton(   // add transaction button
               onPressed: _submitData,
               child: const Text("Add transaction"),
               style: ElevatedButton.styleFrom(

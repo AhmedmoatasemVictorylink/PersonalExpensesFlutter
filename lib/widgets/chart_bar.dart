@@ -11,16 +11,17 @@ ChartBar(this.label, this.spendingAmount, this.spendingPctOfTotal);
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return LayoutBuilder(builder: (ctx, constarints) {
+      return Column(children: [
       Container(
-        height: 20,
+        height: constarints.maxHeight * 0.15,
         child: FittedBox(
           child: Text("\$${spendingAmount.toStringAsFixed(0)}")  // amount text
           ),
           ),
-      SizedBox(height: 4,),
+      SizedBox(height: constarints.maxHeight * 0.05,),
       Container(
-        height: 60,
+        height: constarints.maxHeight * 0.6,
         width: 10,
         child: Stack(children: [  // stack design
           Container(
@@ -39,8 +40,12 @@ ChartBar(this.label, this.spendingAmount, this.spendingPctOfTotal);
           ),)
         ],),
       ),
-      SizedBox(height: 4,),
-      Text(label),  // week day text
+      SizedBox(height: constarints.maxHeight * 0.05,),
+      Container(
+        height: constarints.maxHeight * 0.15,
+        child: FittedBox(child: Text(label))
+        ),  // week day text
     ],);
+    });
   }
 }

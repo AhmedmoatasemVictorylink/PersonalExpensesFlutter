@@ -1,5 +1,4 @@
 
-
 import 'package:flutter/material.dart';
 import '../models/Transaction.dart';
 import 'package:intl/intl.dart';
@@ -12,9 +11,9 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 450,
-      child: transactions.isEmpty ? Column(children: [
+    return  transactions.isEmpty    // trenary expersion
+      // in case of empty list
+      ? Column(children: [
         Text("There is no transactions"),
         SizedBox(height: 20,),
         Container(
@@ -23,7 +22,9 @@ class TransactionList extends StatelessWidget {
             "assets/images/cairofest.png",
             fit: BoxFit.cover,
             ))
-      ],) :  ListView.builder(
+      ],) 
+      // in case of table view for expenses list
+      :  ListView.builder(
         itemBuilder: (ctx, index) {
           return Card(
             elevation: 5,
@@ -31,6 +32,7 @@ class TransactionList extends StatelessWidget {
               vertical: 8,
               horizontal: 5
             ),
+            // table view of expenses 
             child: ListTile(
               leading: CircleAvatar(
                 radius: 30,
@@ -53,7 +55,6 @@ class TransactionList extends StatelessWidget {
           );
         },
         itemCount: transactions.length,
-      ),
-    );
+      );
   }
 }
