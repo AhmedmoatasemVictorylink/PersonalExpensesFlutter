@@ -27,11 +27,19 @@ class TransactionList extends StatelessWidget {
       ],);
       }) 
       // in case of table view for expenses list
-      :  ListView.builder(
-        itemBuilder: (ctx, index) {
-          return TransactionItem(transaction: transactions[index], deleteTx: deleteTx);
-        },
-        itemCount: transactions.length,
+      // :  ListView.builder(
+      //   itemBuilder: (ctx, index) {
+      //     return TransactionItem(transaction: transactions[index], deleteTx: deleteTx);
+      //   },
+      //   itemCount: transactions.length,
+      // );
+      : ListView(
+        children: transactions
+          .map((tx) => TransactionItem(
+            key: ValueKey(tx.id),
+            transaction: tx,
+            deleteTx: deleteTx,
+            )).toList(),
       );
   }
 }

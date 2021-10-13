@@ -109,6 +109,43 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  List<Widget> _buildLandscapeContent(MediaQueryData mediaQuery, AppBar appBar, Widget txListWidget) {
+    return [Row(
+                // nested if inside list
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Show chart",
+                  style: TextStyle(fontFamily: '.SF UI Display'),),  // '.SF UI Display'
+                  Switch.adaptive(
+                    value: _showChart,
+                    onChanged: (val) {
+                      setState(() {
+                        _showChart = val;
+                      });
+                    },
+                  )
+                ],
+              ), _showChart // ternary expression
+                  ? Container(
+                      // chart here
+                      height: (mediaQuery.size.height -
+                              appBar.preferredSize.height -
+                              mediaQuery.padding.top) *
+                          0.7,
+                      child: Chart(_recentTransactions))  
+                  : txListWidget];
+  }
+
+  List<Widget> _buildPortraitContent(MediaQueryData mediaQuery, AppBar appBar, Widget txListWidget) {
+    return [Container(
+                  // chart here
+                  height: (mediaQuery.size.height -
+                          appBar.preferredSize.height -
+                          mediaQuery.padding.top) *
+                      0.3,
+                  child: Chart(_recentTransactions)), txListWidget]; 
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -154,42 +191,10 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             // switch widget
-            if (isLandscape)
-              Row(
-                // nested if inside list
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Show chart",
-                  style: TextStyle(fontFamily: '.SF UI Display'),),  // '.SF UI Display'
-                  Switch.adaptive(
-                    value: _showChart,
-                    onChanged: (val) {
-                      setState(() {
-                        _showChart = val;
-                      });
-                    },
-                  )
-                ],
-              ),
-            if (!isLandscape)
-              Container(
-                  // chart here
-                  height: (mediaQuery.size.height -
-                          appBar.preferredSize.height -
-                          mediaQuery.padding.top) *
-                      0.3,
-                  child: Chart(_recentTransactions)),  // 3
-            if (!isLandscape) txListWidget,   // 7
-            if (isLandscape)
-              _showChart // ternary expression
-                  ? Container(
-                      // chart here
-                      height: (mediaQuery.size.height -
-                              appBar.preferredSize.height -
-                              mediaQuery.padding.top) *
-                          0.7,
-                      child: Chart(_recentTransactions))  // 7
-                  : txListWidget,
+            if (isLandscape) ..._buildLandscapeContent(mediaQuery, appBar, txListWidget),
+              
+            if (!isLandscape) ..._buildPortraitContent(mediaQuery, appBar, txListWidget),
+              
           ],
         ),
       ),
